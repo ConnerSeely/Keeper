@@ -36,5 +36,10 @@ namespace Keeper.Services
             original.Picture = editData.Picture.Length > 0 ? editData.Picture : original.Picture;
             return _repo.Edit(original);
         }
+
+        internal Profile GetProfileById(string id)
+        {
+            return _repo.GetById(id);
+        }
     }
 }

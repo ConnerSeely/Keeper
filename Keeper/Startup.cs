@@ -1,17 +1,10 @@
- using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MySqlConnector;
 using Keeper.Repositories;
@@ -39,9 +32,18 @@ namespace Keeper
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Keeper", Version = "v1" });
             });
             services.AddScoped<IDbConnection>(x => CreateDbConnection());
-            
+
             services.AddScoped<AccountsRepository>();
             services.AddScoped<AccountService>();
+
+            services.AddScoped<KeepsRepository>();
+            services.AddScoped<KeepsService>();
+
+            services.AddScoped<VaultsRepository>();
+            services.AddScoped<VaultsService>();
+
+            services.AddScoped<VaultKeepsRepository>();
+            services.AddScoped<VaultKeepsService>();
         }
 
         private void ConfigureCors(IServiceCollection services)
@@ -94,10 +96,10 @@ namespace Keeper
             }
 
             app.UseHttpsRedirection();
-            
+
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            
+
             app.UseRouting();
 
             app.UseAuthentication();

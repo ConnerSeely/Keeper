@@ -1,0 +1,50 @@
+@import "./main.scss";
+
+#vault-form {
+    padding: 2em;
+    color: $dark;
+
+    input,
+    textarea,
+    select,
+    button {
+        border-radius: 5px;
+        margin: 0.5em 0;
+        padding: 0.5em;
+        border: 0;
+        color: $dark;
+    }
+
+    input,
+    textarea {
+        width: 100%;
+        background: lighten($warning, 50);
+        box-shadow: inset 0px 2px 4px rgba(26, 26, 26, 0.26);
+    }
+
+    textarea {
+        min-height: 8rem;
+    }
+
+    button {
+        display: inline-block;
+        position: relative;
+        width: 25%;
+        padding: 0.75em 0.1em;
+        border: 0;
+
+        // cancel button
+        &:nth-child(9) {
+            margin-left: 50%;
+            background: transparent;
+        }
+
+        // create button
+        &:nth-child(10) {
+            font-weight: 600;
+            background: $secondary;
+            color: $white;
+            text-transform: capitalize;
+        }
+    }
+}
