@@ -12,7 +12,16 @@ class KeepsService {
     AppState.userKeeps = res.data
   }
 
+  async addKeep(newVaultKeep) {
+    const res = await api.post('api/vaultkeeps', newVaultKeep)
+  }
+  async getVaultKeeps(vaultId) {
+    const res = await api.get('api/vaults/' + vaultId + '/keeps')
+    AppState.keeps = res.data
+  }
+
   async setActive(keep) {
+    keep.views++
     AppState.activeKeep = keep
     const res = await api.get(`api/keeps/${keep.id}`)
   }

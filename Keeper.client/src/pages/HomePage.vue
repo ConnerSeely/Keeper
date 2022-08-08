@@ -1,5 +1,5 @@
 <template>
-  <div class="masonry-frame">
+  <div class="masonry-frame p-2">
     <div v-for="k in keeps" :key="k.id">
       <Keep :keep="k" />
     </div>

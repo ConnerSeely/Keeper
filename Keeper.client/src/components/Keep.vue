@@ -42,6 +42,7 @@ export default {
       async setActive() {
         try {
           keepsService.setActive(props.keep)
+          // TODO  open modal here
         } catch (error) {
           Pop.toast("Something went wrong", "error")
           logger.error(error)
@@ -61,7 +62,6 @@ export default {
   height: 20px;
   width: 20px;
 }
-
 .info {
   position: absolute;
   bottom: 1px;

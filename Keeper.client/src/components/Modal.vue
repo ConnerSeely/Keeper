@@ -17,7 +17,7 @@
             aria-label="Close"
           ></button>
         </div>
-        <slot name="body" class="modal-body"> </slot>
+        <slot name="modal-body" class="modal-body"> </slot>
       </div>
     </div>
   </div>

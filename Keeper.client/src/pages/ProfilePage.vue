@@ -2,10 +2,10 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-2 p-2">
-        <img class="account-img rounded" :src="account.picture" alt="" />
+        <img class="account-img rounded" :src="profile.picture" alt="" />
       </div>
       <div class="col-10 p-5">
-        <h1>{{ account.name }}</h1>
+        <h1>{{ profile.name }}</h1>
         <h3>Vaults: {{ userVaults.length }}</h3>
         <h3>Keeps: {{ userKeeps.length }}</h3>
       </div>
@@ -14,6 +14,7 @@
       <h1>
         Vaults
         <i
+          v-if="profile.id == account.id"
           class="mdi mdi-plus selectable"
           data-bs-toggle="modal"
           data-bs-target="#create-vault"
@@ -23,10 +24,10 @@
         <Vault :vault="v" />
       </div>
     </div>
-    <!-- TODO MAKE ICONS DISAPPEAR WHEN NOT CREATOR -->
     <h1>
       Keeps
       <i
+        v-if="profile.id == account.id"
         class="mdi mdi-plus selectable"
         data-bs-toggle="modal"
         data-bs-target="#create-keep"
@@ -57,6 +58,7 @@ import { computed, onMounted } from 'vue'
 import { AppState } from '../AppState.js'
 import { vaultsService } from '../services/VaultsService.js'
 import { keepsService } from '../services/KeepsService.js'
+import { profilesService } from '../services/ProfilesService.js'
 import { logger } from '../utils/Logger.js'
 import Pop from '../utils/Pop.js'
 import { useRoute } from 'vue-router'
@@ -68,6 +70,7 @@ export default {
       try {
         await vaultsService.getAll(route.params.id)
         await keepsService.getProfileKeeps(route.params.id)
+        await profilesService.getProfile(route.params.id)
       } catch (error) {
         Pop.toast('Failed to load Vaults', 'error')
         logger.error(error)

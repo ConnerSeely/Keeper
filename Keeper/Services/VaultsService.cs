@@ -17,7 +17,7 @@ namespace Keeper.Services
         internal Vault Get(int id, string userId)
         {
             Vault foundVault = _repo.Get(id);
-            if (foundVault == null || foundVault.isPrivate == true && foundVault.CreatorId != userId)
+            if (foundVault == null || (foundVault.isPrivate == true && foundVault.CreatorId != userId))
             {
                 throw new Exception("Invalid Id");
             }

@@ -14,22 +14,43 @@
                   keep.kept
                 }}</i></i
               >
-
               <h1 class="pb-2 text-center">{{ keep.name }} <br /></h1>
               <h6 class="pb-4 border-bottom border-secondary">
                 {{ keep.description }}
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. At
-                aspernatur animi incidunt neque maiores expedita quisquam earum
-                laudantium, nobis nostrum eos tempora architecto, laboriosam
-                veniam laborum nihil, velit ratione ullam? Magni, nihil
-                blanditiis earum amet accusantium facere consectetur, quibusdam
-                necessitatibus laborum aperiam laboriosam enim sapiente ab ipsum
-                sit? Ab deserunt officiis aliquam ullam explicabo sapiente ad
-                repellat cupiditate. Iste, accusantium.
               </h6>
+              <!-- add dropdown with for each on uservaults -->
               <div>
-                <i class="mdi mdi-delete text-danger" @click="deleteKeep"></i>
-                <!-- TODO ADD CREATOR PICTURE AND ADD TO VAULT DROPDOWN -->
+                <i
+                  v-if="keep.creatorId == account.id"
+                  class="mdi mdi-delete text-danger"
+                  @click="deleteKeep"
+                ></i>
+                <div class="dropdown open">
+                  <button
+                    class="btn btn-secondary dropdown-toggle"
+                    type="button"
+                    id="triggerId"
+                    data-bs-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Add to Vault
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="triggerId">
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      v-for="v in vaults"
+                      :key="v.id"
+                      :value="v?.name"
+                      @click="addKeep(v.id)"
+                    >
+                      {{ v?.name }}
+                    </a>
+                    <!-- <button class="dropdown-item" href="#">Action</button> -->
+                  </div>
+                </div>
+
                 <img class="profile-img rounded-pill" :src="keep" alt="" />
               </div>
             </div>
@@ -46,24 +67,31 @@ import { AppState } from '../AppState.js'
 import { keepsService } from '../services/KeepsService.js'
 import { logger } from '../utils/Logger.js'
 import Pop from '../utils/Pop.js'
+import { Modal } from 'bootstrap'
 
 export default {
   setup() {
     return {
       keep: computed(() => AppState.activeKeep),
-      // TODO ADD KEEP TO VAULT
-      // async addKeep() {
-      //   try {
-      //     await keepsService.addKeep({ body: review.body, rating: review.rating, restaurantId: AppState.activeRestaurant.id })
-      //   } catch (error) {
-      //     Pop.toast("hmm wrong", 'error')
-      //     logger.log(error)
-      //   }
-      // },
-      //TODO FIX DELETE IT DOESN'T WORK
+      account: computed(() => AppState.account),
+      vaults: computed(() => AppState.myVaults),
+      async addKeep(vaultId) {
+        logger.log('adding keep', vaultId)
+        try {
+          const newVaultKeep = {
+            vaultId: vaultId,
+            keepId: AppState.activeKeep.id
+          }
+          await keepsService.addKeep(newVaultKeep)
+        } catch (error) {
+          Pop.toast("hmm wrong", 'error')
+          logger.log(error)
+        }
+      },
       async deleteKeep() {
         try {
-          await keepsService.deleteKeep()
+          await keepsService.deleteKeep(AppState.activeKeep.id)
+          Modal.getOrCreateInstance(document.getElementById('keep-modal')).hide()
         } catch (error) {
           Pop.toast("hmm wrong", 'error')
           logger.log(error)

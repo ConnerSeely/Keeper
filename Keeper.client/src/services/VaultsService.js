@@ -8,11 +8,18 @@ class VaultsService {
         logger.log(res.data)
         AppState.userVaults = res.data
     }
-
-    async setActive(vault) {
-        AppState.activeVault = vault
-        const res = await api.get(`api/vaults/${vault.id}`)
+    async getMy(profileId) {
+        const res = await api.get('api/profiles/' + profileId + '/vaults')
+        logger.log(res.data, 'my vcaults')
+        AppState.myVaults = res.data
     }
+
+    async getVaultById(vaultId) {
+        const res = await api.get('api/vaults/' + vaultId)
+        logger.log(res.data)
+        AppState.activeVault = res.data
+    }
+
 
     async createVault(body) {
         const res = await api.post('api/vaults', body)
